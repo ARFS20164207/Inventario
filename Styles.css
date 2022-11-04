@@ -1,0 +1,26 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Silkscreen&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+
+body{
+    font-family: 'Montserrat', sans-serif;
+    background-color: rgb(242, 242, 242);
+}
+
+
+
+@media (max-width:360px){
+    /*.pet-card{}*/
+    #btn-attack-container{
+        flex-direction: column;
+    }
+}
+
+.agregar{
+    background-color: rgb(205, 205, 205);
+    border-radius: 10px;
+    border: 2px;
+}
+
+section{
+    display: block;
+}

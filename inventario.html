@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>
+        Inventario Gastrómico
+    </title>
+
+    <link rel="stylesheet" href="./Styles.css"><link/>
+    <link />
+</head>
+
+<body>
+    <section>
+        <h1 class="title">
+            Inventario Gastronómico
+        </h1>
+        <h2 class="subtitle">Manejador de Inventario</h2>
+    </section>
+
+    <section id="main-menu">
+        <section class="agregar">
+            <label for="menu-name">Mode:</label>
+            <select id="menu-name">
+                <option>Pagina principal</option>
+                <option>Ver inventario</option>
+                <option>Aplicar Ventas</option>
+                <option>Aplicar Compras</option>
+                <option>Ingredientes y recetas</option>
+                <option>Calculadora</option>
+            </select>
+        </section>
+
+        <div style="margin: 1px;"></div>
+        <div style="margin: 50px;"></div>
+    </section>
+
+
+    <section id="inventario">
+        <!-- <button id="save-btn">guardar</button>
+        <button id="load-btn">cargar</button> -->
+        <button id="export-btn">cargar</button>
+        <p> Inventario:</p>
+        <input type="number" id="inv-id" value="0">
+        <dev id="inv-content"></dev>
+    </section>
+
+    <section id="add">
+        <section class="agregar">
+        <label for="inv-name">Nombre</label>
+        <select name="item-name" id="inv-name">
+        </select>
+        <label for="inv-qty">Cantidad:</label>
+        <input type="number" id="inv-qty" value="0">
+
+        </select>
+        </section>
+        <button id="inv-btn">Agregar a Inventario</button>
+        <div style="margin: 1px;"></div>
+        <input type="file" id="inv-excel">
+        <div style="margin: 50px;"></div>
+    </section>
+
+
+    <section id="recetas">
+        
+
+        <section class="agregar">
+
+
+            <label for="rec-name">Nombre de Receta</label>
+            <input type="text" id="rec-name" value="Default-Recipe">
+
+
+            <label for="rec-price">Precio x Unidad:</label>
+            <input type="number" id="rec-price" value="0">
+            <div>
+                <label for="rec-ing-name">Nombre de Ingrediente</label>
+                <select name="item-name2" id="rec-ing-name">
+                </select>
+
+                <label for="ing-qty">Cantidad:</label>
+                <input type="number" id="ing-qty" value="0">
+                <label id="ing-qty-unit">Unit</label>
+                <button id="rec-ing-btn">+</button>
+                <p>Preview: </p>
+                <p id="rec-preview">~ </p>
+            </div>
+            
+
+            <button id="rec-btn">agregar Receta</button>
+            
+        </section>
+        <div style="margin: 1px;"></div>
+            <input type="file" id="rec-excel">
+            <div style="margin: 50px;"></div>
+        <p> Recetas:</p>
+            <dev id="rec-content"></dev>
+    </section>
+
+    <section id="ingredientes">
+        
+
+        <section class="agregar">
+
+            <label for="ing-name">Nombre</label>
+            <input type="text" id="ing-name" value="Default-Ingredient">
+
+
+            <label for="ing-price-m">Precio x medida:</label>
+            <input type="number" id="ing-price" value="0">
+            <label for="ing-unit">X</label>
+            <select name="cost-measure" id="ing-price-unit">
+            </select>
+
+            <button id="ing-btn">agregar Ingrediente</button>
+            <div style="margin: 1px;"></div>
+            <input type="file" id="ing-excel">
+            <div style="margin: 50px;"></div>
+        </section>
+        <p> Ingredientes:</p>
+        <dev id="ing-content"></dev>
+    </section>
+
+    <section id="exportar">
+        <button id="z">Imprimir Inventario</button>
+        <input type="file" id="ex">
+    </section>
+    
+    <section id="Calculadora">
+        <p> Calculo de ingredientes:</p>
+        <dev id="cal-content"></dev>
+
+
+        <section class="agregar">
+            <label for="cal-name">Receta</label>
+            <select name="item-name" id="cal-name">
+            </select>
+            <label for="cal-qty">Cantidad:</label>
+            <input type="number" id="cal-qty" value="0">
+
+            </select>
+            <button id="cal-btn">Calcular</button>
+        </section>
+        <div style="margin: 1px;"></div>
+        <input type="file" id="cal-excel">
+        <div style="margin: 50px;"></div>
+    </section>
+
+    <script src="https://unpkg.com/write-excel-file@1.x/bundle/write-excel-file.min.js"></script>
+    <script src="https://unpkg.com/read-excel-file@5.x/bundle/read-excel-file.min.js"></script>
+    <script src="./inventorybase.js"></script>
+    <script src="./inventariocode.js"></script>
+</body>
+
+</html>
