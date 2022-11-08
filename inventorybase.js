@@ -12,6 +12,12 @@ class Ingredient {
     ToString() {
         return (this.nombre + " Price:" + this.costo + "$x " + this.xmedida + " Qty:" + this.cantidad + " " + this.medida)
     }
+    ToTable() {
+        return [his.nombre, this.costo, this.xmedida, this.cantidad, this.medida];
+    }
+    ToOBJ(mysucursal = "Default") {
+        return {nombre : his.nombre,costo: this.costo,unidad: this.xmedida,cantidad: this.cantidad, Sucursal : mysucursal};
+    }
     Instance(instance = null) {
         instance = new Ingredient(this.nombre, this.costo, this.xmedida, this.cantidad, this.medida, this.marca)
         return instance
@@ -39,6 +45,14 @@ class Recipe extends Ingredient {
             txt += "(" + element.ToString() + ")"
         });
         return (this.nombre + " Price:" + this.costo + "$x " + this.xmedida + " Qty:{" + this.cantidad + " " + this.medida + "} Ingredients:[" + txt + "]")
+    }
+    ToOBJ(mysucursal = "Default") {
+        let obj = new Object();
+        obj.Ingredients = []
+        this.ingredients.forEach(element => {
+            obj.ingredients.Push(element.ToOBJ())
+        });
+        return {nombre : his.nombre,costo: this.costo,unidad: this.xmedida,cantidad: this.cantidad, Sucursal : mysucursal,ingredientes: obj.ingredients} ;
     }
     Instance(instance = null) {
         instance = new Recipe(this.nombre, this.costo, this.xmedida, this.cantidad, this.medida)
@@ -74,6 +88,18 @@ class Recipe extends Ingredient {
         }
         return allIng.ingredients;
     }
+    GetContent()
+    {
+        let content = []
+        let header = ["Nombre","Ingredientes","Costo","MedidaXprecio","Cantidad","Medida","Marca"]
+        content.push(header)
+        this.GetIngredients().forEach((element) => {
+            content.push([this.nombre,element.nombre,element.costo,element.xmedida,element.cantidad,element.medida,element.marca])
+        })
+
+        return content
+    }
+
     GetItem(name) {
 
         for (let i = 0; i < this.ingredients.length; i++) {
@@ -168,9 +194,17 @@ class Inventory extends Recipe {
         });
         return txt
     }
+    ToOBJ(mysucursal = "Default") {
+        let obj = new Object();
+        obj.Ingredients = [];
+        this.ingredients.forEach(element => {
+            obj.ingredients.Push(element.ToOBJ())
+        });
+        return {nombre : his.nombre,costo: this.costo,unidad: this.xmedida,cantidad: this.cantidad, Sucursal : mysucursal,ingredientes: obj.ingredients} ;
+    }
     ToExcel()
     {
-        let f = this.GetIngredients();
+        let f = this.GetContent();
 
         let ex = new Excel(f);
 
@@ -299,11 +333,7 @@ class Excel {
                 makeObj["type"] = Number,
                     makeObj["format"] = '#,##0.00'
             }
-            if (i == 0) { makeObj["value"] = (element) => element.op0 }
-            if (i == 1) { makeObj["value"] = (element) => element.op1 }
-            if (i == 2) { makeObj["value"] = (element) => element.op2 }
-            if (i == 3) { makeObj["value"] = (element) => element.op3 }
-            if (i == 4) { makeObj["value"] = (element) => element.op4 }
+            makeObj["value"] = (element) => element["op"+i] 
             mk.push(makeObj)
         }
         return mk

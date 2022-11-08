@@ -126,6 +126,7 @@ function Init() {
     calBtn = document.getElementById("cal-btn")
     saveBtn = document.getElementById("save-btn")
     loadBtn = document.getElementById("load-btn")
+    exportBtn = document.getElementById("export-btn")
     z = document.getElementById("z")
 
     /* ExcelImport */
@@ -191,8 +192,8 @@ function Init() {
     })
 
     ex.addEventListener("change",async function() {
-       await ImportExcelIng(ex,3)
-       await ImportExcelRec(ex,2)
+        await ImportExcelIng(ex,3)
+        await ImportExcelRec(ex,2)
        await ImportExcelInv(ex,1)
     })
 
@@ -205,6 +206,8 @@ function Init() {
     recIngBtn.addEventListener("click", RecPreview)
     recBtn.addEventListener("click", Rec)
     ingBtn.addEventListener("click", Ing)
+
+    exportBtn.addEventListener("click", ExportItems2)
     //saveBtn.addEventListener("click", Save)
     //loadBtn.addEventListener("click", Load)
     z.addEventListener("click", ExportItems)
@@ -219,8 +222,10 @@ function Init() {
         SetDisplays(menuNameDD.options[menuNameDD.selectedIndex].text)
         console.log(menuNameDD.options[menuNameDD.selectedIndex].text);
     })
-    SetDisplays("Pagina principal")
 
+
+    SetDisplays("Pagina principal")
+    
     localStorage.setItem("nombre2", "");
     let miNombre = localStorage.getItem("nombre2");
     console.log(miNombre);  
@@ -255,6 +260,7 @@ function UpdateIngredients() {
 function UpdateCalculator() {
     contentCal.innerHTML = calInventory.ToString()
 }
+//Excel Functions
 async function ReadExcel() {
     const content = await readXlsxFile(ex.files[0])
     pagExcel = new Excel(content)
@@ -282,7 +288,7 @@ async function ImportExcelInv(input,sheet = 1)
                 }
             }
         }
-    )
+        )
 
     Update()
 }
@@ -302,8 +308,8 @@ async function ImportExcelRec(input,sheet = 1){
             }
             recInventory.AddItem(receta.Instance())
         }
-    )
-
+        )
+        
     Update()
 }
 async function ImportExcelIng(input,sheet = 1){
@@ -327,10 +333,11 @@ async function ExportExcelIng(input,sheet = 1){
             receta = new Ingredient(element[0], element[1], element[2], 0, element[2])
             ingInventory.AddItem(receta.Instance())
         }
-    )
-
+        )
+        
     Update()
 }
+//Displayfunctions
 function Inv() {
     if(invNameDD.selectedIndex == -1)return;
     let inputname = invNameDD.options[invNameDD.selectedIndex].text
@@ -360,40 +367,6 @@ function Cal() {
     Update()
 }
 
-function PushRecipe(_selected)
-{
-    let selected = recInventory.GetItem(_selected)
-    if(selected != null){receta = selected.Instance()}
-    else{return false;}
-    let recetacal = receta.GetIngredients()
-    for (let j = 0; j < calQty.value; j++) {
-        for (let i = 0; i < recetacal.length; i++) {
-            calInventory.AddItem(recetacal[i].Instance())
-        }
-    }
-    for (let j = 0; j > calQty.value; j--) {
-        for (let i = 0; i < recetacal.length; i++) {
-            calInventory.SubItem(recetacal[i].Instance())
-        }
-    }
-    return true;
-}
-function PushIngredient(_selected)
-{
-    let selected = ingInventory.GetItem(_selected)
-    if(selected != null){receta = selected.Instance()}
-    else{return false;}
-    let recetacal = receta.GetIngredients()
-    for (let j = 0; j < calQty.value; j++) {
-        
-        calInventory.AddItem(recetacal.Instance())
-        
-    }
-    for (let j = 0; j > calQty.value; j--) {
-        calInventory.SubItem(recetacal.Instance())
-    }
-    return true;
-}
 
 let isMakingRecipe = false;
 let recipePreview;
@@ -425,80 +398,6 @@ function Ing() {
     ingInventory.AddItem(receta.Instance())
     Update()
     InitDDName()
-}
-function Save() {
-    localStorage.setItem("Inventory", Inventories);
-}
-function Load() {
-    let inbox = localStorage.getItem("Inventory");
-    if( inbox != null)
-    {
-        Inventories = inbox;
-    }
-    invInventory = Inventories[invId.value]
-        Update()
-}
-async function ExportItems() {
-    schema = pagExcel.GetSchema(pagExcel.Header())
-    objects = pagExcel.GetObjectGroup(pagExcel.Rows())
-    const content = await writeXlsxFile
-        (objects,
-            {
-                schema,
-                fileName: 'file.xlsx'
-            }
-        )
-}
-
-async function ExportItems2() {
-    schema = invInventory.ToExcel().GetSchema(invInventory.ToExcel().Header())
-    objects = invInventory.ToExcel().GetObjectGroup(invInventory.ToExcel().Rows())
-    const content = await writeXlsxFile
-        (objects,
-            {
-                schema,
-                fileName: 'file.xlsx'
-            }
-        )
-}
-
-function AddValueToAll(Inventory, Recipelist = []) {
-    for (let i = 0; i < this.Recipelist.length; i++) {
-        if (Recipelist[i] instanceof Recipe) {
-
-        }
-        Inventory.AddValue(Recipelist[i].AddValue())
-    }
-
-}
-
-
-function InitDDMeasure() {
-    DDM = new DropDown(ddIngCost)
-    DDM.PushItems1D([
-        "ud", "unidades",
-        "mg", "miligramos",
-        "g", "gramos",
-        "kg", "kilogramos",
-        "ml", "mililitros",
-        "lt", "litros",
-        "oz", "onzas",
-        "gal", "galones",
-        "cu", "cucharadas",
-        'Libras','Libras',
-        'Kilogramos','Kilogramos',
-        'Onzas','Onzas',
-        'Piedras','Piedras',
-        'Libras de Troy','Libras de Troy',
-        'Onzas de Troy','Onzas de Troy',
-        'Gramos','Gramos',
-        'Miligramos','Miligramos',
-        'Microgramos','Microgramos',
-        'Quilates','Quilates',
-        'Quintales cortos','Quintales cortos',
-        'Quintales largos','Quintales largos'
-        
-    ])
 }
 
 function SetDisplays(selection)
@@ -580,3 +479,113 @@ function DisplayShow(section)
 {
     section.style.display = "block"
 }
+//Storage
+function Save() {
+    localStorage.setItem("Inventory", Inventories);
+}
+function Load() {
+    let inbox = localStorage.getItem("Inventory");
+    if( inbox != null)
+    {
+        Inventories = inbox;
+    }
+    invInventory = Inventories[invId.value]
+    Update()
+}
+async function ExportItems() {
+    schema = pagExcel.GetSchema(pagExcel.Header())
+    objects = pagExcel.GetObjectGroup(pagExcel.Rows())
+    const content = await writeXlsxFile
+    (objects,
+        {
+            schema,
+            fileName: 'file.xlsx'
+        }
+    )
+}
+
+async function ExportItems2() {
+    schema = invInventory.ToExcel().GetSchema(invInventory.ToExcel().Header())
+    objects = invInventory.ToExcel().GetObjectGroup(invInventory.ToExcel().Rows())
+    const content = await writeXlsxFile
+    (objects,
+        {
+            schema,
+            fileName: 'inventory.xlsx'
+        }
+    )
+}
+        
+function AddValueToAll(Inventory, Recipelist = []) {
+    for (let i = 0; i < this.Recipelist.length; i++) {
+        if (Recipelist[i] instanceof Recipe) {
+            
+        }
+        Inventory.AddValue(Recipelist[i].AddValue())
+    }
+    
+}
+
+function PushRecipe(_selected)
+{
+    let selected = recInventory.GetItem(_selected)
+    if(selected != null){receta = selected.Instance()}
+    else{return false;}
+    let recetacal = receta.GetIngredients()
+    for (let j = 0; j < calQty.value; j++) {
+        for (let i = 0; i < recetacal.length; i++) {
+            calInventory.AddItem(recetacal[i].Instance())
+        }
+    }
+    for (let j = 0; j > calQty.value; j--) {
+        for (let i = 0; i < recetacal.length; i++) {
+            calInventory.SubItem(recetacal[i].Instance())
+        }
+    }
+    return true;
+}
+function PushIngredient(_selected)
+{
+    let selected = ingInventory.GetItem(_selected)
+    if(selected != null){receta = selected.Instance()}
+    else{return false;}
+    let recetacal = receta.GetIngredients()
+    for (let j = 0; j < calQty.value; j++) {
+        
+        calInventory.AddItem(recetacal.Instance())
+        
+    }
+    for (let j = 0; j > calQty.value; j--) {
+        calInventory.SubItem(recetacal.Instance())
+    }
+    return true;
+}
+
+function InitDDMeasure() {
+    DDM = new DropDown(ddIngCost)
+    DDM.PushItems1D([
+        "ud", "unidades",
+        "mg", "miligramos",
+        "g", "gramos",
+        "kg", "kilogramos",
+        "ml", "mililitros",
+        "lt", "litros",
+        "oz", "onzas",
+        "gal", "galones",
+        "cu", "cucharadas",
+        'Libras','Libras',
+        'Kilogramos','Kilogramos',
+        'Onzas','Onzas',
+        'Piedras','Piedras',
+        'Libras de Troy','Libras de Troy',
+        'Onzas de Troy','Onzas de Troy',
+        'Gramos','Gramos',
+        'Miligramos','Miligramos',
+        'Microgramos','Microgramos',
+        'Quilates','Quilates',
+        'Quintales cortos','Quintales cortos',
+        'Quintales largos','Quintales largos'
+        
+    ])
+}
+

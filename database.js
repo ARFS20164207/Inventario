@@ -36,3 +36,8 @@ class Data_Inventory {
         this.group = group;
     }
 }
+
+function SendInvTable()
+{
+    
+}
